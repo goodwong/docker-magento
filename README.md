@@ -34,6 +34,8 @@ cp .env.example .env
 - NGINX_HOST_HTTPS_PORT  
 - DB_ADMINER_PORT  
 
+> 生产环境下，建议修改数据库密码  
+
 ### 运行
 ```shell
 cd .docker-compose
