@@ -67,3 +67,16 @@ tar jxf .docker-compose/magento-1.9.3.9-2018-06-27-02-47-24.tar -C public/
 > 数据库用户名：`app`<默认,可在.env文件修改>  
 > 数据库密码：`app`<默认,可在.env文件修改>  
 > 数据库名称：`app`<默认,可在.env文件修改>  
+
+## 导入/管理数据库
+1. 通过`adminer`的web界面操作
+    ```shell
+    docker-compose up adminer
+    ```
+    打开浏览器 http://IP地址:<DB_ADMINER_PORT>  
+    `Server`填写`db`  
+2. 进入mysql容器
+    ```shell
+    docker-compose exec db bash
+    mysql -u root -p
+    ```
