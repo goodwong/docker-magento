@@ -120,6 +120,13 @@ cd public/
     > 数据库密码：`app`<默认,可在.env文件修改>  
     > 数据库名称：`app`<默认,可在.env文件修改>  
 
+## 设置文件权限
+```
+cd .docker-compose/
+docker-compose exec php-fpm bash
+chown -R www-data:www-data public/var/ public/media/
+```
+
 ## 导入/管理数据库
 1. 通过`adminer`的web界面操作
     ```shell
