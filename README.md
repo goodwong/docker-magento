@@ -121,7 +121,7 @@ cd public/
     > 数据库名称：`app`<默认,可在.env文件修改>  
 
 ## 设置文件权限
-```
+```shell
 cd .docker-compose/
 docker-compose exec php-fpm bash
 chown -R www-data:www-data public/var/ public/media/
