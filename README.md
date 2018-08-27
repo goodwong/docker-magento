@@ -70,12 +70,13 @@ mkdir public/
 
 ### 克隆
 ```shell
+cd magento-domain-1/
 git clone https://github.com/goodwong/docker-magento .docker-compose
 ```
 
 ### 配置
 ```shell
-cd .docker-compose
+cd .docker-compose/
 cp .env.example .env
 ```
 默认配置即可运行，如果有多个magento站点运行，分别修改一下变量为不同的值：
@@ -88,7 +89,7 @@ cp .env.example .env
 
 ### 运行
 ```shell
-cd .docker-compose
+cd .docker-compose/
 docker-compose up -d web
 
 # 如果需要查看日志，增加：
@@ -101,6 +102,7 @@ docker-compose logs -f
 
 ### 全新magento代码
 ```shell
+cd magento-domain-1/
 cd public/
 # tar jxf .docker-compose/magento-1.9.3.9-2018-06-27-02-47-24.tar -C public/
 # 文件过大，自行下载吧。。。
