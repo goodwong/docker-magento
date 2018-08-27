@@ -4,23 +4,73 @@
 
 
 
-## 安装 docker
-参见docker 官方文档
+## 安装 docker & docker-compose
+参见docker 官方文档  
+https://docs.docker.com/install/linux/docker-ce/ubuntu/  
+https://docs.docker.com/compose/install/#master-builds  
 
 
 
 ## 创建项目文件夹
 ```shell
+# 项目文件夹
 mkdir magento-domain-1/ && cd magento-domain-1/
+
+# magento 1.x 代码文件夹
+mkdir public/
 ```
 
+### 文件夹结构
+```
+.
+├── .docker-compose # <---- docker-compose 运行及数据文件夹
+│   ├── adminer
+│   ├── db
+│   ├── docker-compose.yml
+│   ├── .env
+│   ├── .env.example
+│   ├── .git
+│   ├── .gitignore
+│   ├── nginx
+│   ├── php-fpm
+│   └── README.md
+└── public # <------------- magento 1.x 代码文件夹
+    ├── api.php
+    ├── app
+    ├── cron.php
+    ├── cron.sh
+    ├── dev
+    ├── downloader
+    ├── error_log
+    ├── errors
+    ├── favicon.ico
+    ├── get.php
+    ├── .htaccess
+    ├── .htaccess.sample
+    ├── includes
+    ├── index.php
+    ├── index.php.sample
+    ├── install.php
+    ├── js
+    ├── lib
+    ├── LICENSE_AFL.txt
+    ├── LICENSE.html
+    ├── LICENSE.txt
+    ├── mage
+    ├── media
+    ├── php.ini.sample
+    ├── RELEASE_NOTES.txt
+    ├── shell
+    ├── skin
+    └── var
+```
 
 
 ## 安装 docker-magento
 
 ### 克隆
 ```shell
-git clone https://github.com/goodwong/docker-magento
+git clone https://github.com/goodwong/docker-magento .docker-compose
 ```
 
 ### 配置
@@ -51,32 +101,60 @@ docker-compose logs -f
 
 ### 全新magento代码
 ```shell
-tar jxf .docker-compose/magento-1.9.3.9-2018-06-27-02-47-24.tar -C public/
+cd public/
+# tar jxf .docker-compose/magento-1.9.3.9-2018-06-27-02-47-24.tar -C public/
+# 文件过大，自行下载吧。。。
 ```
 然后在浏览器里访问 `http://你的服务器ip或域名:nginx端口号`
-安装过程中，配置数据库：
+安装过程中，配置数据库： 
 > 数据库地址：`db`  
 > 数据库用户名：`app`<默认,可在.env文件修改>  
 > 数据库密码：`app`<默认,可在.env文件修改>  
 > 数据库名称：`app`<默认,可在.env文件修改>  
 
 ### 使用现有的magento代码
-1. 解压代码
-2. 修改app/etc/local.xml数据库信息：
-> 数据库地址：`db`  
-> 数据库用户名：`app`<默认,可在.env文件修改>  
-> 数据库密码：`app`<默认,可在.env文件修改>  
-> 数据库名称：`app`<默认,可在.env文件修改>  
+1. 解压代码至 `public/`文件夹
+2. 修改`app/etc/local.xml`数据库信息：
+    > 数据库地址：`db`  
+    > 数据库用户名：`app`<默认,可在.env文件修改>  
+    > 数据库密码：`app`<默认,可在.env文件修改>  
+    > 数据库名称：`app`<默认,可在.env文件修改>  
 
 ## 导入/管理数据库
 1. 通过`adminer`的web界面操作
     ```shell
+    cd .docker-compose/
     docker-compose up adminer
     ```
     打开浏览器 http://IP地址:<DB_ADMINER_PORT>  
     `Server`填写`db`  
-2. 进入mysql容器
+2. 进入mysql容器  
+    首先将数据文件解压并放在`项目文件夹`下
     ```shell
+    cd .docker-compose/
     docker-compose exec db bash
-    mysql -u root -p
+    cd /var/www/html/
+    mysql -p magento < database_backup_file.sql # 可能需要 -u root指定用户
     ```
+
+## 多站点多项目
+> 注意分别修改`.env文件`里端口变量为不同的值  
+
+建议使用`nginx`作前端机，配置代理规则
+```nginx
+server {
+    listen 80;
+    listen [::]:80;
+
+    server xxx.com www.xxx.com;
+
+    location / {
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_pass http://127.0.0.1:8888/; # **the ending slash is necessary !!!** #
+    }
+}
+```
