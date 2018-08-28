@@ -22,8 +22,8 @@ mkdir public/
 
 ### 文件夹结构
 ```
-.
-├── .docker-compose # <---- docker-compose 运行及数据文件夹
+magento-domain-1/
+├── .docker-compose/ # <---- docker-compose 运行及数据文件夹
 │   ├── adminer
 │   ├── db
 │   ├── docker-compose.yml
@@ -34,7 +34,7 @@ mkdir public/
 │   ├── nginx
 │   ├── php-fpm
 │   └── README.md
-└── public # <------------- magento 1.x 代码文件夹
+└── public/ # <------------- magento 1.x 代码文件夹
     ├── api.php
     ├── app
     ├── cron.php
@@ -82,7 +82,6 @@ cp .env.example .env
 默认配置即可运行，如果有多个magento站点运行，分别修改一下变量为不同的值：
 - COMPOSE_PROJECT_NAME  
 - NGINX_HOST_HTTP_PORT  
-- NGINX_HOST_HTTPS_PORT  
 - DB_ADMINER_PORT  
 
 > 生产环境下，建议修改数据库密码  
@@ -151,6 +150,9 @@ chown -R www-data:www-data public/var/ public/media/
 
 建议使用`nginx`作前端机，配置代理规则
 ```nginx
+# 宿主机
+# ／etc/nginx/sites-available/domain-1.conf
+
 server {
     listen 80;
     listen [::]:80;
@@ -163,7 +165,8 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-        proxy_pass http://127.0.0.1:8888/; # **the ending slash is necessary !!!** #
+        proxy_pass http://127.0.0.1:8888/; # <--- 末尾必须有/符号
+                                           # <--- 端口号见<NGINX_HOST_HTTP_PORT> 变量
     }
 }
 ```
