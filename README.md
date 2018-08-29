@@ -146,7 +146,10 @@ chown -R www-data:www-data public/var/ public/media/
     cd .docker-compose/
     docker-compose exec db bash
     cd /var/www/html/
-    mysql -p magento < database_backup_file.sql # 可能需要 -u root指定用户
+    mysql -p magento < database_backup_file.sql
+    #           ^                ^
+    #        数据库名         数据库备份文件
+    #       见.env文件
     ```
 
 ## 多站点多项目
