@@ -133,14 +133,17 @@ chown -R www-data:www-data public/var/ public/media/
 ```
 
 ## 导入/管理数据库
-1. 通过`adminer`的web界面操作
+有两种方式管理数据库：
+- 方法一，通过`adminer`的web界面操作
     ```shell
     cd .docker-compose/
     docker-compose up adminer
     ```
     打开浏览器 http://IP地址:<DB_ADMINER_PORT>  
-    `Server`填写`db`  
-2. 进入mysql容器  
+    `Server`地址填写`db`  
+
+
+- 方法二，进入mysql容器，使用命令行界面  
     首先将数据文件解压并放在`项目文件夹`下
     ```shell
     cd .docker-compose/
