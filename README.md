@@ -79,12 +79,16 @@ git clone https://github.com/goodwong/docker-magento .docker-compose
 cd .docker-compose/
 cp .env.example .env
 ```
-默认配置即可运行，如果有多个magento站点运行，分别修改一下变量为不同的值：
-- COMPOSE_PROJECT_NAME  
-- NGINX_HOST_HTTP_PORT  
-- DB_ADMINER_PORT  
+默认配置即可运行，如果有多个magento站点运行，分别修改以下变量为不同的值：
+- `COMPOSE_PROJECT_NAME`=  
+- `NGINX_HOST_HTTP_PORT`=  
+- `DB_ADMINER_PORT`=  
 
 > 生产环境下，建议修改数据库密码  
+> - `DB_ROOT_PASSWORD`=  
+> - `DB_PASSWORD`=  
+> - `DB_USER`=  
+> - `DB_NAME`=  
 
 ### 运行
 ```shell
@@ -109,17 +113,17 @@ cd public/
 然后在浏览器里访问 `http://你的服务器ip或域名:nginx端口号`
 安装过程中，配置数据库： 
 > 数据库地址：`db`  
-> 数据库用户名：`app`<默认,可在.env文件修改>  
-> 数据库密码：`app`<默认,可在.env文件修改>  
-> 数据库名称：`app`<默认,可在.env文件修改>  
+> 数据库用户名：`root` 或.env文件`<DB_USER>`  
+> 数据库密码：见.env文件 `<DB_ROOT_PASSWORD>`或`<DB_PASSWORD>`  
+> 数据库名称：见.env文件 `<DB_NAME>`，可不填  
 
 ### 使用现有的magento代码
 1. 解压代码至 `public/`文件夹
 2. 修改`app/etc/local.xml`数据库信息：
     > 数据库地址：`db`  
-    > 数据库用户名：`app`<默认,可在.env文件修改>  
-    > 数据库密码：`app`<默认,可在.env文件修改>  
-    > 数据库名称：`app`<默认,可在.env文件修改>  
+    > 数据库用户名：见.env文件`<DB_USER>`  
+    > 数据库密码：见.env文件`<DB_PASSWORD>`  
+    > 数据库名称：见.env文件 `<DB_NAME>`  
 
 ## 设置文件权限
 ```shell
